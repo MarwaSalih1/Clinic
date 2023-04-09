@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Internationalization Example</title>
+	<meta charset="UTF-8">
+	<script>
+		function formatDate(date, language) {
+			return new Intl.DateTimeFormat(language).format(date);
+		}
+
+		function formatNumber(number, language) {
+			return new Intl.NumberFormat(language).format(number);
+		}
+
+		function switchLanguage(language) {
+			// Update the content based on the selected language
+			document.getElementById('greeting').textContent = getGreeting(language);
+			document.getElementById('today').textContent = formatDate(new Date(), language);
+			document.getElementById('number').textContent = formatNumber(12345.6789, language);
+			
+			// Store the language preference in a cookie
+			document.cookie = "language=" + language;
+		}
+
+		function getGreeting(language) {
+			switch (language) {
+				case 'ar':
+					return 'أهلاً وسهلاً!';
+				default:
+					return 'Hello!';
+			}
+		}
+
+		function initialize() {
+			// Get the user's language preference from the cookie
+			var language = document.cookie.replace(/(?:(?:^|.*;\s*)language\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+			
+			// If the language preference is not set, use the default language
+			if (!language) {
+				language = 'en';
+			}
+			
+			// Set the language switcher to the user's language preference
+			document.getElementById('language').value = language;
+			
+			// Update the content based on the user's language preference
+			switchLanguage(language);
+		}
+	</script>
+</head>
+<body onload="initialize()">
+	<h1 id="greeting">Hello!</h1>
+	<p>Today is <span id="today"></span>.</p>
+	<p>The number is <span id="number"></span>.</p>
+	<select id="language" onchange="switchLanguage(this.value)">
+		<option value="en">English</option>
+		<option value="ar">Arabic</option>
+	</select>
+</body>
+</html>
+
+
+css
+const lang = {
+  en: {
+    greeting: 'Hello!',
+    intro: 'Welcome to my website.',
+    ...
+  },
+  fr: {
+    greeting: 'Bonjour!',
+    intro: 'Bienvenue sur mon site web.',
+    ...
+  }
+}
+
+
+
+
+function switchLang(langCode) {
+  let langObj = {};
+
+  // Load the language object based on the selected language code
+  switch(langCode) {
+    case 'en':
+      langObj = en;
+      break;
+    case 'ar':
+      langObj = ar;
+      break;
+    // Add more cases for other languages if necessary
+  }
+
+  // Replace each element's text with the corresponding translation
+  let elements = document.querySelectorAll('[data-i18n]');
+  for (let element of elements) {
+    let key = element.getAttribute('data-i18n');
+    element.textContent = langObj[key];
+  }
+}
